@@ -4,14 +4,18 @@ import useChatHistory from "@/hooks/chat/useChatHistory";
 import ChatContainer from "./ChatContainer";
 import Sponsor from "../Sponsor";
 import { ChatHistoryLoading } from "./ChatContainer/ChatHistory";
-import ResetChat from "../ResetChat";
+import { useCallback } from "react";
 
-export default function ChatWindow({ closeChat, settings, sessionId }) {
+
+export default function ChatWindow({ isFullscreen, toggleFullscreen, closeChat, settings, sessionId }) {
   const { chatHistory, setChatHistory, loading } = useChatHistory(
     settings,
     sessionId
   );
-
+  
+  const getClassName = useCallback(() => {
+    return isFullscreen ? '' : 'allm-mt-4 allm-pb-4'
+  }, [isFullscreen])
   if (loading) {
     return (
       <div className="allm-flex allm-flex-col allm-h-full">
@@ -21,6 +25,8 @@ export default function ChatWindow({ closeChat, settings, sessionId }) {
           iconUrl={settings.brandImageUrl}
           closeChat={closeChat}
           setChatHistory={setChatHistory}
+          isFullscreen={isFullscreen}
+          toggleFullscreen={toggleFullscreen}
         />
         <ChatHistoryLoading />
         <div className="allm-pt-4 allm-pb-2 allm-h-fit allm-gap-y-1">
@@ -41,6 +47,8 @@ export default function ChatWindow({ closeChat, settings, sessionId }) {
         iconUrl={settings.brandImageUrl}
         closeChat={closeChat}
         setChatHistory={setChatHistory}
+        isFullscreen={isFullscreen}
+        toggleFullscreen={toggleFullscreen}
       />
       <div className="allm-flex-grow allm-overflow-y-auto">
         <ChatContainer
@@ -49,13 +57,13 @@ export default function ChatWindow({ closeChat, settings, sessionId }) {
           knownHistory={chatHistory}
         />
       </div>
-      <div className="allm-mt-4 allm-pb-4 allm-h-fit allm-gap-y-2 allm-z-10">
+      <div className={`${getClassName()} allm-h-fit allm-gap-y-2 allm-z-10`}>
         <Sponsor settings={settings} />
-        <ResetChat
+        {/* <ResetChat
           setChatHistory={setChatHistory}
           settings={settings}
           sessionId={sessionId}
-        />
+        /> */}
       </div>
     </div>
   );

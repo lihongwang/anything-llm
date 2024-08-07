@@ -7,8 +7,12 @@ import {
   DotsThreeOutlineVertical,
   Envelope,
   X,
+  ArrowsOutSimple,
+  ArrowsInSimple,
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
+import ResetChat from "../../ResetChat";
+
 
 export default function ChatWindowHeader({
   sessionId,
@@ -16,6 +20,8 @@ export default function ChatWindowHeader({
   iconUrl = null,
   closeChat,
   setChatHistory,
+  isFullscreen: isFullscreenProp,
+  toggleFullscreen,
 }) {
   const [showingOptions, setShowOptions] = useState(false);
   const menuRef = useRef();
@@ -43,12 +49,26 @@ export default function ChatWindowHeader({
     };
   }, [menuRef]);
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    setIsFullscreen(isFullscreenProp);
+  }, [isFullscreenProp]);
+  const handleFullscreen = () => {
+    toggleFullscreen();
+  };
+
   return (
     <div
       style={{ borderBottom: "1px solid #E9E9E9" }}
       className="allm-flex allm-items-center allm-relative allm-rounded-t-2xl"
       id="anything-llm-header"
     >
+      <ResetChat
+        className="allm-absolute allm-left-2"
+        setChatHistory={setChatHistory}
+        settings={settings}
+        sessionId={sessionId}
+      />
       <div className="allm-flex allm-justify-center allm-items-center allm-w-full allm-h-[76px]">
         <img
           style={{ maxWidth: 48, maxHeight: 48 }}
@@ -57,7 +77,19 @@ export default function ChatWindowHeader({
         />
       </div>
       <div className="allm-absolute allm-right-0 allm-flex allm-gap-x-1 allm-items-center allm-px-[22px]">
-        {settings.loaded && (
+        <button
+          type="button"
+          onClick={handleFullscreen}
+          className="allm-bg-transparent hover:allm-cursor-pointer allm-border-none hover:allm-bg-gray-100 allm-rounded-sm allm-text-slate-800/60"
+          aria-label="Fullscreen"
+        >
+          {isFullscreen ? (
+            <ArrowsInSimple size={20} weight="bold" />
+          ) : (
+            <ArrowsOutSimple size={20} weight="bold" />
+          )}
+        </button>
+        {/* {settings.loaded && (
           <button
             ref={buttonRef}
             type="button"
@@ -67,7 +99,7 @@ export default function ChatWindowHeader({
           >
             <DotsThreeOutlineVertical size={20} weight="fill" />
           </button>
-        )}
+        )} */}
         <button
           type="button"
           onClick={closeChat}

@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { parseStylesSrc } from "./utils/constants.js";
 const appElement = document.createElement("div");
-
+appElement.style.background = "#fff";
 document.body.appendChild(appElement);
 const root = ReactDOM.createRoot(appElement);
 root.render(

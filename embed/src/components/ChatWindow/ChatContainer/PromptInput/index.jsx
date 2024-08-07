@@ -1,7 +1,8 @@
-import { CircleNotch, PaperPlaneRight } from "@phosphor-icons/react";
+import { CircleNotch, PaperPlaneRight, Spinner } from "@phosphor-icons/react";
 import React, { useState, useRef, useEffect } from "react";
-
+import useDebounce from "@/hooks/useDebounce";
 export default function PromptInput({
+  checkMessage,
   message,
   submit,
   onChange,
@@ -23,7 +24,7 @@ export default function PromptInput({
     setFocused(false);
     submit(e);
   };
-
+  const debouncedSubmit = useDebounce(handleSubmit, 1000);
   const resetTextAreaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -48,7 +49,7 @@ export default function PromptInput({
   return (
     <div className="allm-w-full allm-sticky allm-bottom-0 allm-z-10 allm-flex allm-justify-center allm-items-center allm-bg-white">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={debouncedSubmit}
         className="allm-flex allm-flex-col allm-gap-y-1 allm-rounded-t-lg allm-w-full allm-items-center allm-justify-center"
       >
         <div className="allm-flex allm-items-center allm-w-full">
@@ -63,7 +64,7 @@ export default function PromptInput({
                 onKeyDown={captureEnter}
                 onChange={onChange}
                 required={true}
-                disabled={inputDisabled}
+                disabled={checkMessage || inputDisabled}
                 onFocus={() => setFocused(true)}
                 onBlur={(e) => {
                   setFocused(false);
@@ -71,7 +72,7 @@ export default function PromptInput({
                 }}
                 value={message}
                 className="allm-font-sans allm-border-none allm-cursor-text allm-max-h-[100px] allm-text-[14px] allm-mx-2 allm-py-2 allm-w-full allm-text-black allm-bg-transparent placeholder:allm-text-slate-800/60 allm-resize-none active:allm-outline-none focus:allm-outline-none allm-flex-grow"
-                placeholder={"Send a message"}
+                placeholder={"请输入内容"}
                 id="message-input"
               />
               <button
@@ -82,7 +83,9 @@ export default function PromptInput({
                 id="send-message-button"
                 aria-label="Send message"
               >
-                {buttonDisabled ? (
+                {checkMessage ? (
+                  <Spinner size={24} className="allm-animate-spin" />
+                ) : buttonDisabled ? (
                   <CircleNotch className="allm-w-4 allm-h-4 allm-animate-spin" />
                 ) : (
                   <PaperPlaneRight
