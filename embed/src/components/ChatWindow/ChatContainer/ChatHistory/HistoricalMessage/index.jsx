@@ -19,7 +19,7 @@ const HistoricalMessage = forwardRef(
     if (error) console.error(`ANYTHING_LLM_CHAT_WIDGET_ERROR: ${error}`);
 
     return (
-      <div className="py-[5px]">
+      <div className="allm-py-[5px]">
         {role === "assistant" && (
           <div
             className={`allm-text-[10px] allm-text-gray-400 allm-ml-[54px] allm-mr-6 allm-mb-2 allm-text-left allm-font-sans`}
@@ -64,10 +64,10 @@ const HistoricalMessage = forwardRef(
                 <div className="allm-p-2 allm-rounded-lg allm-bg-red-50 allm-text-red-500">
                   <span className={`allm-inline-block `}>
                     <Warning className="allm-h-4 allm-w-4 allm-mb-1 allm-inline-block" />{" "}
-                    Could not respond to message.
+                    无法回复消息。
                   </span>
                   <p className="allm-text-xs allm-font-mono allm-mt-2 allm-border-l-2 allm-border-red-500 allm-pl-2 allm-bg-red-300 allm-p-2 allm-rounded-sm">
-                    Server error
+                    服务器错误
                   </p>
                 </div>
               ) : (
